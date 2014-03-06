@@ -16,6 +16,8 @@
 {
     NSString *_text;
     NSMutableArray *_fontFamilies;
+
+    NSMutableArray *_saveFontFamilies;
 }
 
 - (void)viewDidLoad
@@ -23,7 +25,7 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
 
-    _fontFamilies = [NSMutableArray new];
+    _saveFontFamilies = [NSMutableArray new];
     _text = @"中文字体";
 
     _tableView.delegate = self;
@@ -44,12 +46,13 @@
         for( NSString *fontName in fontNames ){
             printf( "\tFont: %s \n", [fontName UTF8String] );
 
-            [fonts addObject:[UIFont fontWithName:fontName size:20]];
+            [fonts addObject:[UIFont fontWithName:fontName size:18]];
         }
 
-        [_fontFamilies addObject:fonts];
+        [_saveFontFamilies addObject:fonts];
     }
 
+    _fontFamilies = [_saveFontFamilies mutableCopy];
 }
 
 - (void)didReceiveMemoryWarning
@@ -78,8 +81,11 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *cellIdentifier = @"Cell";
-    UITableViewCell *cell = [_tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
+    static NSString *CellIdentifier = @"Cell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+    }
 
     UIFont *font = _fontFamilies[indexPath.section][indexPath.row];
     cell.textLabel.text = [NSString stringWithFormat:@"%@-%@,%@", _text, font.fontName, font.familyName];
@@ -101,7 +107,7 @@
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 60;
+    return 64;
 }
 
 - (IBAction)changeText:(id)sender
@@ -122,6 +128,36 @@
         [_tableView reloadData];
     }
 }
+
+
+#pragma mark - Search Delegate
+
+- (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller
+{
+    _fontFamilies = [_saveFontFamilies mutableCopy];
+}
+
+- (void)searchDisplayControllerDidEndSearch:(UISearchDisplayController *)controller
+{
+    _fontFamilies = [_saveFontFamilies mutableCopy];
+}
+
+- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
+{
+    [_fontFamilies removeAllObjects];
+
+    NSArray *arr;
+    for (NSMutableArray *family in _saveFontFamilies) {
+        arr = [family filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF.fontName contains[cd] %@", searchString]];
+        if (arr.count > 0) {
+            [_fontFamilies addObject:arr];
+        }
+
+    }
+
+    return YES;
+}
+
 
 
 @end

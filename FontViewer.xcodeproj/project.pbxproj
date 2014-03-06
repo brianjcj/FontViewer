@@ -396,6 +396,7 @@
 				GCC_PREFIX_HEADER = "FontViewer/FontViewer-Prefix.pch";
 				INFOPLIST_FILE = "FontViewer/FontViewer-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -409,6 +410,7 @@
 				GCC_PREFIX_HEADER = "FontViewer/FontViewer-Prefix.pch";
 				INFOPLIST_FILE = "FontViewer/FontViewer-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -474,6 +476,7 @@
 				09F7470F18C7CC7000860E57 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		09F7471018C7CC7000860E57 /* Build configuration list for PBXNativeTarget "FontViewerTests" */ = {
 			isa = XCConfigurationList;
@@ -482,6 +485,7 @@
 				09F7471218C7CC7000860E57 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
