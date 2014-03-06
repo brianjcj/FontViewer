@@ -37,13 +37,11 @@
 {
     NSArray *familyNames = [UIFont familyNames];
     for( NSString *familyName in familyNames ){
-        //NSLog(@"Family: %@", familyName);
         printf( "Family: %s \n", [familyName UTF8String] );
         NSArray *fontNames = [UIFont fontNamesForFamilyName:familyName];
 
         NSMutableArray *fonts = [NSMutableArray new];
         for( NSString *fontName in fontNames ){
-            //NSLog(@"\tFamily: %@", fontName);
             printf( "\tFont: %s \n", [fontName UTF8String] );
 
             [fonts addObject:[UIFont fontWithName:fontName size:20]];
@@ -60,6 +58,7 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - table view delegate and datasource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -100,6 +99,11 @@
 
 }
 
+- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 60;
+}
+
 - (IBAction)changeText:(id)sender
 {
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Change Text" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil];
@@ -110,7 +114,9 @@
 
 - (void) alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-    if (buttonIndex != -1) {
+    NSLog(@"button index: %ld", (long)buttonIndex);
+
+    if (buttonIndex == 1) {
         _text = [alertView textFieldAtIndex:0].text;
 
         [_tableView reloadData];
